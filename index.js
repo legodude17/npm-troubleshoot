@@ -1,24 +1,30 @@
 "use strict";
 var semver = require('semver');
-var rules = require('./rules');
+var allRules = require('./rules');
 var log = require('npmlog');
 var symbols = require('log-symbols');
 log.heading = 'npm';
 log.addLevel('success', 5000, {}, symbols.success);
-log.disp.warn = symbols.warning;
-module.exports = function (level, cb) {
-  level && log.level = level;
-  rules.run('all', log, function (err, clean) {
-    cb && cb(err, clean);
+module.exports = function (level, rules, cb) {
+  if (typeof cb !== 'function') {
+    cb = rules;
+    rules = null;
+  }
+  if (typeof cb !== 'function') {
+    cb = level;
+    level = null;
+  }
+  log.level = level || 'warn';
+  allRules.run(rules || 'all', log, function (err, clean) {
     if (err) {
       log.error('troubleshoot', 'Error while running rules:', err.message);
-      return process.exit(1);
+      return;
     }
     if (!clean) {
       log.warn('troubleshoot', 'Some tests failed');
-      return process.exit(1);
+      return;
     }
     log.success('troubleshoot', 'All tests succeeded');
-    process.exit(0);
+    cb && cb(err, clean);
   });
 };

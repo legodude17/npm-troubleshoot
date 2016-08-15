@@ -4,9 +4,6 @@
   "description": "A setup for toubleshooting npm.",
   "main": "index.js",
   "bin": "cli.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "keywords": [
     "toubleshoot",
     "npm",
@@ -18,5 +15,9 @@
     "log-symbols": "^1.0.2",
     "npmlog": "^4.0.0",
     "semver": "^5.3.0"
+  },
+  "registry": {
+    "type": "git",
+    "url": "https://github.com/legodude17/npm-troubleshoot"
   }
 }
