@@ -1,5 +1,5 @@
 {
-  "name": "troubleshoot",
+  "name": "npm-troubleshoot",
   "version": "0.1.0",
   "description": "A setup for toubleshooting npm.",
   "main": "index.js",
@@ -16,7 +16,7 @@
     "npmlog": "^4.0.0",
     "semver": "^5.3.0"
   },
-  "registry": {
+  "repository": {
     "type": "git",
     "url": "https://github.com/legodude17/npm-troubleshoot"
   }

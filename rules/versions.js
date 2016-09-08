@@ -5,6 +5,7 @@ var semver = require('semver');
 
 const MIN_NODE_VERSION = '6.0.0';
 const MIN_NPM_VERSION = '3.10.0';
+const NAME = 'versions';
 
 function evalVersions(str) {
   var versions;
@@ -13,16 +14,23 @@ function evalVersions(str) {
 function checkVersions(versions) {
   var nodeVer = versions.node;
   var npmVer = versions.npm;
-  var nodeVerGood = !semver.lt(nodeVer, MIN_NODE_VERSION);
-  var npmVerGood = !semver.lt(npmVer, MIN_NPM_VERSION);
-  return nodeVerGood && npmVerGood;
+  if (semver.lt(nodeVer, MIN_NODE_VERSION)) {
+    return 'node';
+  }
+  if (semver.lt(npmVer, MIN_NPM_VERSION)) {
+    return 'npm';
+  }
+  return true;
 }
 module.exports.run = function (log, cb_) {
-  function cb(error, success, data) {
+  function cb(error, success, message, data) {
     if (error) {
-      return cb_(error, false, 'versions', null);
+      return cb_(error, false, NAME, data);
     }
-    cb_(error, success, 'versions', data);
+    if (success) {
+      return cb_(error, true, NAME, message);
+    }
+    cb_(error, false, NAME, message, data);
   }
 
   log.verbose('versions', 'Running `npm version`');
@@ -42,10 +50,11 @@ module.exports.run = function (log, cb_) {
       return cb(e);
     }
     log.silly('versions', 'Checking versions');
-    if (checkVersions(versions)) {
+    var version = checkVersions(versions);
+    if (version === true) {
       cb(null, true, versions);
     } else {
-      cb(null, false, versions);
+      cb(null, false, 'upgrade', version);
     }
   });
 }

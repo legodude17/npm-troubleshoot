@@ -1,0 +1,5 @@
+{
+  "upgrade": "Please upgrade %s, it is out of date.",
+  "no_internet": "No internet. Please check your internet connection.",
+  "registry_unreachable": "Unable to reach registry. Try navigating your web browser to %s.%s"
+}

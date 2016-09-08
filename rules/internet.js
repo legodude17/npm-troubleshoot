@@ -4,11 +4,14 @@ var http = require('http');
 const NAME = 'internet'
 
 module.exports.run = function (log, cb_) {
-  function cb(error, success, data) {
+  function cb(error, success, message, data) {
     if (error) {
-      return cb_(error, false, NAME, null);
+      return cb_(error, false, NAME, data);
     }
-    cb_(error, success, NAME, data);
+    if (success) {
+      return cb_(error, true, NAME, message);
+    }
+    cb_(error, false, NAME, message, data);
   }
 
   log.http(NAME, 'Begining request for example.com');
@@ -19,7 +22,7 @@ module.exports.run = function (log, cb_) {
   }).on('error', (e) => {
     log.error(NAME, 'Error while fetching.');
     if (e.code === 'EAI_AGAIN') {
-      cb(null, false, e);
+      cb(null, false, 'no_internet');
     } else {
       cb(e);
     }
