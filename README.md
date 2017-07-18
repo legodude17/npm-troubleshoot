@@ -1,6 +1,9 @@
 # npm-troubleshoot
 A utility for troubleshooting npm.
 
+# npm
+A similar command has made it into `npm` itself! Try running `npm doctor`.
+
 # Usage
 
 ## Command Line
